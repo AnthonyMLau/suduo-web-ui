@@ -1,0 +1,17 @@
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.board-border {
+	clear: both;
+	content: "";
+	display: table;
+  border-style: solid;
+  border-width: 3px;
+}
+
+.status {
+  margin-bottom: 10px;
+}
