@@ -1,6 +1,10 @@
 .game {
   /*display: flex;*/
-  /*flex-direction: row;*/
+  display: table;
+  flex-direction: row;
+	border: .6vmin solid;
+	border-radius: .6vmin;
+	/*border-color: blue;*/
 }
 
 .game-info {
@@ -9,11 +13,20 @@
 
 .game-board {
 	display: flex;
-
+	/*flex-wrap: wrap;*/
+	/*height: 100%;*/
+	/*width: 100%;*/
+	/*border: .4vmin solid;*/
+	/*border-radius: 1vmin;*/
 }
 
 .game-board:after {
 	clear: both;
 	content: "";
 	display: table;
+}
+
+.game-button {
+	margin: 0.2vmin;
+	width: 10em;
 }

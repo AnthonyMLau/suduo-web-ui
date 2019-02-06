@@ -9,9 +9,24 @@
 	content: "";
 	display: table;
   border-style: solid;
-  border-width: 3px;
+  border-width: .6vmin;
+  border-radius: .5vmin;
 }
 
 .status {
   margin-bottom: 10px;
+}
+
+.board-bottom {
+	clear: both;
+	content: "";
+	display: table;
+  border-bottom: .4vmin solid;
+}
+
+.board-right {
+	clear: both;
+	content: "";
+	display: table;
+  border-right: .4vmin solid ;
 }

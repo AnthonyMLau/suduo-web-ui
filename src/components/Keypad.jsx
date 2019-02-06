@@ -1,49 +1,76 @@
 import React, { Component } from 'react';
-import Square from './Square';
+// import Square from './Square';
+import Cell from './Cell';
+import { gameProperties } from './Game';
 
 import './Board.css';
 
 export default class Keypad extends Component {
 	constructor (props) {
 		super (props);
+    const { squaresPerBoardRow } = gameProperties;
+
 		this.state = {
-      selectedValue: null,
+      // selectedValue: null,
+      // private array - use to iterate through # of items via map()
+      //   can very well be using a loop
+      digits: Array (squaresPerBoardRow).fill(null),
+      modeChange: false,
 		}
+
+    this.myState = {
+      modeChanged: false,
+    }
 	}
 
 	handleClick = (i) => {
-    const { selectedValue } = this.state;
-    if ( selectedValue === i )
+    const { keypadIdx } = this.props;
+    if ( keypadIdx === i )
       return;
 
   	// console.log ('Keypad.handleClick', i);
-    this.setState ( {selectedValue: i} );
+    // this.setState ( {selectedValue: i} );
     this.props.keypadIdxChange (i);
   }
 
-  renderSquare(i) {
-    return <Square value={ i+1 }
-                   selectedValue = {this.state.selectedValue}
-    							 handleClick = { () => this.handleClick (i) } />;
+  shouldComponentUpdate (nextProps, nextState) {
+    this.myState.modeChanged = (this.props.keypadMode !== nextProps.keypadMode);
+    return true;
   }
 
-  renderSquareRow = (row) => (
-    <div className="board-row">
-      {this.renderSquare(row*3+0)}
-      {this.renderSquare(row*3+1)}
-      {this.renderSquare(row*3+2)}
-    </div>    
-  );
+  renderSquare(i) {
+    return (
+      <Cell value={ i+1 }
+         selectedValue = {this.props.keypadIdx}
+				 handleClick = { () => this.handleClick (i) } 
+         bold = {!this.props.keypadMode}
+         active = { i === this.props.keypadIdx }
+         redraw = { this.myState.modeChanged /** || i === this.props.keypadIdx **/}
+         key = { i } />
+    );
+  }
+
+  renderSquareRow = (row) => {
+    const { squaresPerBoardRow } = gameProperties;
+    return (
+      <div className="board-row" key={row} >
+        { this.state.digits.map ( (val, idx) => (
+            this.renderSquare (row*squaresPerBoardRow + idx)
+          ))}
+      </div>
+    );  
+  };
 
   render() {
     return (
       <div>
         {/* <div className="status" > {status} </div> */}
         <div className='board-border' >
-          { this.renderSquareRow(0) }
-          { this.renderSquareRow(1) }
-          { this.renderSquareRow(2) }
+          { this.state.digits.map ( (val, idx) => (
+              this.renderSquareRow (idx)
+            ))}
         </div>
+        <br/>
       </div>
     );
   }

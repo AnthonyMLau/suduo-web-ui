@@ -1,4 +1,4 @@
-.square {
+.cell {
   background: #fff;
   border: 1px solid #999;
   float: left;
@@ -13,11 +13,11 @@
   width: 34px;
 }
 
-.square:focus {
+.cell:focus {
   outline: none;
 }
 
-.kbd-navigation .square:focus {
+.kbd-navigation .cell:focus {
   background: #ddd;
 }
 
@@ -31,4 +31,16 @@
 
 .color-red {
   color: red;
+}
+
+.color-blue {
+  color: blue;
+}
+
+.color-green {
+  color: green;
+}
+
+.color-pink {
+  color: pink;
 }

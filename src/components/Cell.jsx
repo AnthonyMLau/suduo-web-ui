@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './Square.css';
+import './Cell.css';
 
-export default class Square extends Component {
+export default class Cell extends Component {
 	constructor (props) {
 		super (props);
 		this.state = {
@@ -16,29 +16,26 @@ export default class Square extends Component {
    with the name being 'redraw'
  ****************************************************/
 	shouldComponentUpdate (nextProps, nextState) {
-		// console.log ('this.props', this.props, 'nextProps', nextProps);
-		if (this.props.redraw || nextProps.redraw)
+		// console.log ('Cell: this.props', this.props, 'nextProps', nextProps);
+		if (nextProps.redraw)
+			return true;
+
+		if (this.props.active !== nextProps.active)
+			return true;
+
+		if (this.props.value !== nextProps.value)
 			return true;
 
 		return false;
 	}
 
   render() {
-		const { value, handleClick, selectedValue, bold } = this.props;
-		let cName = 'square ';
+		const { value, handleClick, bold, color, active } = this.props;
+		let cName = 'cell ';
 
 		let setBoldRed = false;
-		if (this.props.gameInit) {
-			if (this.state.digitSet === false)
-				this.state.digitSet = value ? value : false;
-			else if (!value)
-				this.state.digitSet = false;
-		}
-
-		if (this.state.digitSet)
-			setBoldRed = true;
-
-		console.log ('>> Square.render() >> state.digitSet', this.state.digitSet)
+		// console.log ('>>Cell.render() >> state.digitSet', this.state.digitSet,
+		// 	'props', this.props);
 
 		if (bold || setBoldRed) {
 			cName += 'bold ';
@@ -46,9 +43,15 @@ export default class Square extends Component {
 				cName += 'color-red ';
 		}
 
-		if (selectedValue != null && selectedValue === value-1) {
-			cName += ' shaded';
-		} 
+		if (active)
+			cName += 'shaded '
+
+		if (color === 'red')
+			cName += 'color-red ';
+		else if (color === 'blue')
+			cName += 'color-blue '
+		else if (color === 'pink')
+			cName += 'color-pink '
 
 		return (
 			<button className={cName} onClick={ handleClick } >
