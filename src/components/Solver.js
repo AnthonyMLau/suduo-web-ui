@@ -1,5 +1,4 @@
-
-
+import { gameProperties } from './Game';
 
 let numCheckValueInvoked = 0;
 let numBackTracking = 0;
@@ -12,8 +11,11 @@ let timeCheckValue;
 	cell
  **********************************************/
 function assembleLegalValues (gameData, row, col) {
+
 	numAssembleLegalValues++;
 	const legalValues = [];
+
+	// check each digits (1..9) and save the possible ones
 	for (let num = 1; num <= 9; num++) {
 		if (checkValue (gameData, row, col, num))
 			legalValues.push (num);
@@ -38,14 +40,18 @@ function assembleLegalValues (gameData, row, col) {
 	An array of empty slots:
 	[0] = row
 	[1] = col
-	[2] = current index into the legal array of numbers
+	[2] = current index into the legal array of numbers 
+				used for BackTracking
 	[3] = array of legal values for this cell (row, col)
  **********************************************/
 function assembleEmptySlots (gameData) {
+	const { boardsPerRow, squaresPerBoardRow } = gameProperties;
+	const cellsPerDataRow = boardsPerRow * squaresPerBoardRow;
+
 	const emptySlots = [];
 	let i, j;
 
-	for (i=0; i<9; i++) {
+	for (i=0; i < cellsPerDataRow; i++) {
 		for (j=0; j<gameData[i].length; j++) {
 			if (gameData[i][j] === 0) {
 
@@ -72,7 +78,10 @@ function assembleEmptySlots (gameData) {
 	ALL input arguements should be immutable
  **********************************************/
 function checkRow (gameData, rowIndex, value) {
-	for (let i=0; i<9; i++)
+	const { boardsPerRow, squaresPerBoardRow } = gameProperties;
+	const cellsPerDataRow = boardsPerRow * squaresPerBoardRow;
+
+	for (let i=0; i < cellsPerDataRow; i++)
 		if (gameData[rowIndex][i] === value) 
 			return false;
 	return true;
@@ -83,7 +92,10 @@ function checkRow (gameData, rowIndex, value) {
 	ALL input arguements should be immutable
  **********************************************/
 function checkCol (gameData, colIndex, value) {
-	for (let i=0; i<9; i++)
+	const { boardsPerRow, squaresPerBoardRow } = gameProperties;
+	const cellsPerDataRow = boardsPerRow * squaresPerBoardRow;
+
+	for (let i=0; i < cellsPerDataRow; i++)
 		if (gameData[i][colIndex] === value)
 			return false;
 	return true;
@@ -97,17 +109,17 @@ function checkBoard (gameData, rowIndex, colIndex, value) {
 	// finds the upper top left corner of the corresponding board
 	let rowCorner = 0,
 			colCorner =0;
-	const boardSize = 3;
+	const { squaresPerBoardRow } = gameProperties;
 
-	while (colIndex >= colCorner + boardSize)
-		colCorner += boardSize;
+	while (colIndex >= colCorner + squaresPerBoardRow)
+		colCorner += squaresPerBoardRow;
 
-	while (rowIndex >= rowCorner + boardSize)
-		rowCorner += boardSize;
+	while (rowIndex >= rowCorner + squaresPerBoardRow)
+		rowCorner += squaresPerBoardRow;
 
 	let i, j;
-	for (i=rowCorner; i<rowCorner+boardSize; i++)
-		for (j=colCorner; j<colCorner+boardSize; j++)
+	for (i=rowCorner; i < rowCorner + squaresPerBoardRow; i++)
+		for (j=colCorner; j < colCorner + squaresPerBoardRow; j++)
 			if (gameData[i][j] === value)
 				return false;
 
@@ -324,6 +336,8 @@ function solvePuzzle3 (board, emptyPositions) {
 
 /**********************************************
 	puzzle solver
+	returns the "solved" puzzle if it is solvable
+	returns null if it is NOT solvable
  **********************************************/
 export default function Solver (inputGameData) {
 
@@ -352,5 +366,5 @@ export default function Solver (inputGameData) {
 	console.log ('Total time:', timeTaken, 'msec');
 	console.log ('# of times assembleLegalValues() called', numAssembleLegalValues);
 
-	return gameData;
+	return solved ? gameData : null;
 }

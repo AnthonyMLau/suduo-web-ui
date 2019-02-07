@@ -235,6 +235,12 @@ export default class Game extends Component {
     const dataRowIdx = ~~(boardID / boardsPerRow)*squaresPerBoardRow + boardRow;
     const dataColIdx = (boardID % boardsPerRow)*squaresPerBoardRow + boardCol;
 
+    // prevents the user (playing) from changing the board's initial settings
+    if (this.state.keypadMode === 1 && this.myProps.slotStatus[dataRowIdx][dataColIdx] === 1) {
+      this.setMessageText ("Cannot alter game's setup");
+      return;
+    }
+
 
     // Gets a copy of the row
     const dataRow = this.state.slots[dataRowIdx].slice();
@@ -243,8 +249,7 @@ export default class Game extends Component {
 
     const { slots } = this.state;
     if (!checkValue(slots, dataRowIdx, dataColIdx, this.state.keypadIdx+1)) {
-      console.log ('value collision', this.state.keypadIdx+1);
-      this.setMessageText ('This value cannot be put here!')
+      this.setMessageText (this.state.keypadIdx+1 + ' cannot be put here!')
       return;
     }
 
@@ -333,24 +338,28 @@ export default class Game extends Component {
    ************************************************/
   solvePuzzleBehindTheScene = () => {
     const resolved = Solver (this.state.slots);
-
     if ( resolved === null ) {
+      console.log ('solvePuzzleBehindTheScene...null')
       this.setMessageText ('Puzzle is NOT solvable!')
     }
     else {
       this.myProps.solvedPuzzle = resolved.slice();
       this.clearMessageText();
     }
+
+    return resolved !== null;
   }
 
   /************************************************
-    
+    Only solve the puzzle behind the scene if it
+    has NOT been solved. (don't keep calling Solve() un-necessarily)
+    - Also check to see if it is solvable
    ************************************************/
   solvePuzzle = () => {
-    // const slots = Solver (this.state.slots);
     if (!this.myProps.isPuzzleSolved) {
-      this.solvePuzzleBehindTheScene();
-      this.myProps.isPuzzleSolved = true;
+      this.myProps.isPuzzleSolved = this.solvePuzzleBehindTheScene();
+      if (!this.myProps.isPuzzleSolved)
+        return;
     }
     else {
       this.setMessageText ('Game already solved. Please start a new Game.')
@@ -361,7 +370,7 @@ export default class Game extends Component {
       slots: this.myProps.solvedPuzzle,
       gameInit: false,
       keypadMode: 0,
-      userMessage: 'Puzzle Solved',
+      // userMessage: userMsg,
     });
   }
 

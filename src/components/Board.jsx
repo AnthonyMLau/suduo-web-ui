@@ -12,7 +12,7 @@ export default class Board extends Component {
     const { squaresPerBoardRow } = gameProperties;
     const iterBoardRow = Array(squaresPerBoardRow).fill(null);
     const tempData = [];
-    for (let i=0; i<3; i++)
+    for (let i=0; i < squaresPerBoardRow; i++)
       tempData.push (iterBoardRow.slice());
 
     this.myProps = {
