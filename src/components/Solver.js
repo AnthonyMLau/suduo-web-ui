@@ -15,7 +15,7 @@ function assembleLegalValues (gameData, row, col) {
 	numAssembleLegalValues++;
 	const legalValues = [];
 
-	// check each digits (1..9) and save the possible ones
+	// check each digit (1..9) and save the possible ones
 	for (let num = 1; num <= 9; num++) {
 		if (checkValue (gameData, row, col, num))
 			legalValues.push (num);
@@ -23,7 +23,8 @@ function assembleLegalValues (gameData, row, col) {
 
 	// tries to ramdomize the distribution...
 	const limit = legalValues.length;
-	for (let i=0; i<limit; i++) {
+	const numSwaps = ~~(limit/2);
+	for (let i=0; i < numSwaps; i++) {
 		const swapPairIndexOne = Math.floor (Math.random() * limit);
 		const swapPairIndexTwo = Math.floor (Math.random() * limit);
 
