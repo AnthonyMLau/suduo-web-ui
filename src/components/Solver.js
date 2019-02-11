@@ -241,7 +241,6 @@ function solvePuzzle2 (board, emptyPositions) {
     	// console.log ('Tried all legal values in [',i,'] and NO fit, initiating a BackTracking')
       board[row][column] = 0;
       emptyPositions[i][2] = 0;	// reset the current index into the valid array
-      // emptyPositions[i][3] = assembleLegalValues (board, row, column);      
       i--;
     }
   }

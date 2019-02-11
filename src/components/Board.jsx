@@ -32,10 +32,11 @@ export default class Board extends Component {
    ****************************************************/
   shouldComponentUpdate (nextProps, nextState) {
     // console.log ('Board: currentProps', this.props, 'nextProps', nextProps);
+    const { squaresPerBoardRow } = gameProperties;
     let requireRedraw = false;
     let i, j;
-    for (i=0; i<3 && !requireRedraw; i++)
-      for (j=0; j<3 && !requireRedraw; j++)
+    for (i=0; i < squaresPerBoardRow && !requireRedraw; i++)
+      for (j=0; j < squaresPerBoardRow && !requireRedraw; j++)
         if (this.props.boardData[i][j] !== nextProps.boardData[i][j]) {
           requireRedraw = true;
         }
@@ -43,7 +44,7 @@ export default class Board extends Component {
     if (requireRedraw) {
       // save a copy of the current props.boardData into myProps...
       const boardData = [];
-      for ( i=0; i<3; i++)
+      for ( i=0; i < squaresPerBoardRow; i++)
         boardData.push (this.props.boardData[i].slice());
       this.myProps.boardData = boardData;
     }
